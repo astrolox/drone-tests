@@ -15,7 +15,7 @@ RSpec.shared_examples "docker-ubuntu-16-apache-2.4" do
     end
 
     describe command("curl -sS http://localhost:#{LISTEN_PORT}") do
-      its(:stdout) { should eq "Hello World" }
+      its(:stdout) { should eq "Apache2.4 Container" }
       its(:stderr) { should eq "" }
     end
 
