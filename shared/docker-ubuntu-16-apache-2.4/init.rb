@@ -7,11 +7,11 @@ RSpec.shared_examples "docker-ubuntu-16-apache-2.4" do
     it { should be_installed }
   end
 
-  describe process('httpd') do
+    describe process('apache2') do
     it { should be_running }
   end
 
-  describe file('/etc/apache21/ports2.conf') do
+  describe file('/etc/apache2/ports.conf') do
     it { should contain('Listen 8080') }
   end
 
@@ -34,7 +34,8 @@ RSpec.shared_examples "docker-ubuntu-16-apache-2.4" do
 
   
   describe file('/etc/apache2/mods-available/dir.conf') do
-    it { should contain('DirectoryIndex index.php index.html index.cgi index.pl index.php index.xhtml index.htm') }
+    it { should exist }
+    it { should contain('DirectoryIndex index.php index.html index.cgi index.pl index.xhtml index.htm') }
   end
 
   describe file('/etc/apache2/sites-available/000-default.conf') do
