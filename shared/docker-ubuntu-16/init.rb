@@ -7,6 +7,10 @@ RSpec.shared_examples "docker-ubuntu-16" do
     it { should contain 'DISTRIB_RELEASE=16.04' }
   end
 
+  describe command('id -u') do
+    its(:stdout) { should eq '100000' }
+  end
+
   describe package('supervisor') do
     it { should be_installed }
   end
