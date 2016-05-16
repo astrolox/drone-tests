@@ -8,7 +8,7 @@ RSpec.shared_examples "docker-ubuntu-16" do
   end
 
   describe command('id -u') do
-    its(:stdout) { should eq '100000' }
+    its(:stdout) { should eq '100000\n' }
   end
 
   describe package('supervisor') do
