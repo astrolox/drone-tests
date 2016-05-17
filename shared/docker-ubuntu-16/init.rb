@@ -33,12 +33,12 @@ RSpec.shared_examples "docker-ubuntu-16" do
 
  describe file('/hooks') do
    it { should be_directory }
-   it { should be_writable.by('others') }
+   it { should be_mode 755 }
  end
 
  describe file('/init') do
    it { should be_directory }
-   it { should be_writable.by('others') }
+   it { should be_mode 755 }
  end
 
  describe file('/var/log/supervisor') do
