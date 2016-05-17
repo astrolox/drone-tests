@@ -18,8 +18,12 @@ RSpec.shared_examples "docker-ubuntu-16-apache-2.4-php-5.6" do
       its(:exit_status) { should eq 0 }
     end
 
+    describe command('id -u') do
+      its(:stdout) { should match /^100000$/ }
+    end
+
     describe command("curl -sS http://localhost:#{LISTEN_PORT}/rspecphpversion.php") do
-      its(:stdout) { should match (/5\.6\.21\-7\+donate\.sury\.org~xenial\+1/) }
+      its(:stdout) { should eq "5.6.21-7+donate.sury.org~xenial+1" }
       its(:stderr) { should eq "" }
     end
 
