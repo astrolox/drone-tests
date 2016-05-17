@@ -23,7 +23,7 @@ RSpec.shared_examples "docker-ubuntu-16-apache-2.4-php-5.6" do
     end
 
     describe command("curl -sS http://localhost:#{LISTEN_PORT}/rspecphpversion.php") do
-      its(:stdout) { should eq "5.6.21-7+donate.sury.org~xenial+1" }
+      its(:stdout) { should start_with "5.6." }
       its(:stderr) { should eq "" }
     end
 
