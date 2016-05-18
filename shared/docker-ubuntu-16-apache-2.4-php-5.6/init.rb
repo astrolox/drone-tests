@@ -4,15 +4,13 @@ require 'serverspec'
 RSpec.shared_examples "docker-ubuntu-16-apache-2.4-php-5.6" do
 
   describe "Container" do
-    before(:all)  do
-      @container = Docker::Container.create(
-        'Image'        => @image.id,
-        'HostConfig'   => {
-        'PortBindings' => { "#{LISTEN_PORT}/tcp" => [{ 'HostPort' => "#{LISTEN_PORT}" }]}
-        }
-      )
-      @container.start
-    end
+    @container = Docker::Container.create(
+      'Image'        => Docker::Image.get(ENV['IMAGE']).id,
+      'HostConfig'   => {
+      'PortBindings' => { "#{LISTEN_PORT}/tcp" => [{ 'HostPort' => "#{LISTEN_PORT}" }]}
+      }
+    )
+    @container.start
 
     describe command("echo '<?php echo phpversion(); ?>' > /var/www/html/rspecphpversion.php") do
       its(:exit_status) { should eq 0 }
@@ -27,10 +25,8 @@ RSpec.shared_examples "docker-ubuntu-16-apache-2.4-php-5.6" do
       its(:stderr) { should eq "" }
     end
 
-    after(:all) do
-      @container.kill
-      @container.delete(:force => true)
-    end
+    @container.kill
+    @container.delete(:force => true)
   end
 
 end
