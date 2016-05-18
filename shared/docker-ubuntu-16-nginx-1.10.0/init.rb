@@ -12,13 +12,13 @@ RSpec.shared_examples "docker-ubuntu-16-nginx-1.10.0" do
   end
 
   describe file('/etc/nginx/sites-available/default') do
-    it { should contain('Listen 8080') }
-    it { should contain('Listen [::]:8080') }
+    it { should contain('listen 8080') }
+    it { should contain('listen [::]:8080') }
   end
 
     describe file('/var/run/nginx.pid') do
         it { should exist }
-        it {should be_file }
+        it { should be_file }
     end
 
     describe file('/etc/nginx/nginx.conf') do
@@ -42,28 +42,23 @@ RSpec.shared_examples "docker-ubuntu-16-nginx-1.10.0" do
         it { should be_writable.by('others') }
     end
 
-  describe "Container" do
-    before(:all)  do
-      @container = Docker::Container.create(
-        'Image'       => @image.id,
-        'HostConfig'  => {
-        'PortBindings' => { "#{LISTEN_PORT}/tcp" => [{ 'HostPort' => "#{LISTEN_PORT}" }]}
-        }
-      )
-      @container.start
-    end
+  describe "Container tests" do
+    @container = Docker::Container.create(
+      'Image'       => Docker::Image.get(ENV['IMAGE']).id,
+      'HostConfig'  => {
+      'PortBindings' => { "#{LISTEN_PORT}/tcp" => [{ 'HostPort' => "#{LISTEN_PORT}" }]}
+      }
+    )
+    @container.start
 
     describe command("curl -sS http://localhost:#{LISTEN_PORT}") do
-      its(:stdout) { should eq "Nginx\n\n" }
+      its(:stdout) { should eq "Nginx\n" }
       its(:stderr) { should eq "" }
     end
 
-    after(:all) do
-      @container.kill
-      @container.delete(:force => true)
-    end
+    @container.kill
+    @container.delete(:force => true)
   end
 
+
 end
-
-
