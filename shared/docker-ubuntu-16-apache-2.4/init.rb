@@ -32,7 +32,6 @@ RSpec.shared_examples "docker-ubuntu-16-apache-2.4" do
     it { should be_file }
   end
 
-  
   describe file('/etc/apache2/mods-available/dir.conf') do
     it { should exist }
     it { should contain('DirectoryIndex index.php index.html index.cgi index.pl index.xhtml index.htm') }
@@ -44,28 +43,22 @@ RSpec.shared_examples "docker-ubuntu-16-apache-2.4" do
     it { should contain('AllowOverride All') }
   end
 
-  describe "Container" do
-    before(:all)  do
-      @container = Docker::Container.create(
-        'Image'       => @image.id,
-        'HostConfig'  => {
-        'PortBindings' => { "#{LISTEN_PORT}/tcp" => [{ 'HostPort' => "#{LISTEN_PORT}" }]}
-        }
-      )
-      @container.start
-    end
+  describe "Container tests" do
+    @container = Docker::Container.create(
+      'Image'       => Docker::Image.get(ENV['IMAGE']).id,
+      'HostConfig'  => {
+      'PortBindings' => { "#{LISTEN_PORT}/tcp" => [{ 'HostPort' => "#{LISTEN_PORT}" }]}
+      }
+    )
+    @container.start
 
     describe command("curl -sS http://localhost:#{LISTEN_PORT}") do
       its(:stdout) { should eq "Apache2.4 Container\n\n" }
       its(:stderr) { should eq "" }
     end
 
-    after(:all) do
-      @container.kill
-      @container.delete(:force => true)
-    end
+    @container.kill
+    @container.delete(:force => true)
   end
 
 end
-
-
