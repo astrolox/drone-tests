@@ -66,7 +66,7 @@ RSpec.shared_examples "docker-ubuntu-16" do
  end
 
  describe command('ls -l /var/lib/apt/lists') do
-   its(:stdout) { should match /^0$/ }
+   its(:stdout) { should match /^total 0$/ }
  end
 
  describe command('echo $SUPERVISORD_EXIT_ON_FATAL') do
