@@ -1,7 +1,7 @@
 require 'rspec'
 require 'serverspec'
 
-RSpec.shared_examples "docker-ubuntu-16-apache-2.4-php-5.6" do
+RSpec.shared_examples "php-5.6-tests" do
 
   describe "Container" do
     @container = Docker::Container.create(
