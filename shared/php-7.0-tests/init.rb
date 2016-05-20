@@ -4,13 +4,6 @@ require 'serverspec'
 RSpec.shared_examples "php-7.0-tests" do
 
   describe "Container" do
-    @container = Docker::Container.create(
-      'Image'        => Docker::Image.get(ENV['IMAGE']).id,
-      'HostConfig'   => {
-      'PortBindings' => { "#{LISTEN_PORT}/tcp" => [{ 'HostPort' => "#{LISTEN_PORT}" }]}
-      }
-    )
-    @container.start
 
     describe command('id -u') do
       its(:stdout) { should match /^100000$/ }
@@ -27,8 +20,6 @@ RSpec.shared_examples "php-7.0-tests" do
       end
     end
 
-    @container.kill
-    @container.delete(:force => true)
   end
 
 end
