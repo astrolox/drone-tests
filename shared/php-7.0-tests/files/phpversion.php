@@ -1,6 +1,6 @@
 <?php
 $ver = phpversion();
-if ( preg_match("/^5\.6\..*$/", $ver))
+if ( preg_match("/^7\.0\..*$/", $ver))
 {
   echo "Success";
 } else {
