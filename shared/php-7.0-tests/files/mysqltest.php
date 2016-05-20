@@ -1,11 +1,9 @@
 <?php
-$item = "'1";
-$escaped_item = mysql_escape_string($item);
-$check = "\'1";
 
-if (strcmp($escaped_item, $check) == 0)  {
+if ((extension_loaded('mysqli')) and (function_exists("mysqli_connect"))) {
     echo "Success";
 } else {
     echo "Failure";
 }
+
 ?>
