@@ -53,4 +53,8 @@ RSpec.shared_examples "docker-ubuntu-16-nginx-1.10.0" do
     its(:stderr) { should eq "" }
   end
 
+    describe port(8080) do
+      it { should be_listening }
+    end
+
 end
