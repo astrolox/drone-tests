@@ -24,4 +24,16 @@ RSpec.shared_examples "mysql-tests" do
         it { should exist }
         it { should belong_to_group 'mysql' }
     end
+
+    describe "create database" do
+        describe command("echo \"DROP DATABASE IF EXISTS dbtest; CREATE DATABASE dbtest; SHOW DATABASES LIKE 'dbtest'\" | mysql --user=root --password=$MYSQL_ROOT_PASSWORD") do
+            its(:stdout) { should match /dbtest/ }
+        end
+    end
+
+    describe "create user and run query" do
+        describe command("echo \"CREATE USER 'testuser'@'localhost' IDENTIFIED BY 'testpass'; GRANT ALL PRIVILEGES ON *.* TO 'testuser'@'localhost'; FLUSH PRIVILEGES; SELECT user, host FROM mysql.user\" | mysql --user=root --password=$MYSQL_ROOT_PASSWORD") do
+            its(:stdout) { should match /testuser\tlocalhost/ }
+        end
+    end
 end
