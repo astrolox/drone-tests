@@ -9,6 +9,11 @@ RSpec.shared_examples "wordpress" do
       its(:stdout) { should match /^100000$/ }
     end
 
+    describe command("curl -sS http://localhost:#{LISTEN_PORT}/wp-admin/setup-config.php") do
+      its(:stdout) { should contain  "Select a default language" }
+      its(:stderr) { should eq "" }
+    end
+
 #    cwd=Pathname.new(File.join(File.dirname(__FILE__)))
 #    files = Dir["#{cwd}/files/*.php"]
 #    short_files = files.map { |f| File.basename(f) }
