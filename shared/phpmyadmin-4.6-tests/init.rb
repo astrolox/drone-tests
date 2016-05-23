@@ -9,7 +9,17 @@ RSpec.shared_examples "phpmyadmin-4.6-tests" do
     end
 
     describe command("echo $PHP_UPLOAD_MAX_FILESIZE") do
-        its(:stdout) { should contain "64M"}
+        its(:stdout) { should eq "64M\n"}
+        its(:stderr) { should eq "" }
+    end
+
+    describe command("echo $PMA_CONTROL_HOST") do
+        its(:stdout) { should eq "localhost\n"}
+        its(:stderr) { should eq "" }
+    end
+
+    describe command("echo $PMA_CONTROL_PORT") do
+        its(:stdout) { should eq "3306\n"}
         its(:stderr) { should eq "" }
     end
 
