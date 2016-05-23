@@ -56,7 +56,7 @@ RSpec.shared_examples "docker-ubuntu-16-nginx-1.10.0" do
         short_files.each do |f|
 
         describe command("curl -sS http://localhost:#{LISTEN_PORT}/#{f}") do
-            its(:stdout) { should eq "Nginx" }
+            its(:stdout) { should eq "Nginx\n" }
             its(:stderr) { should eq "" }
         end
 
