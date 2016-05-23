@@ -52,9 +52,15 @@ RSpec.shared_examples "docker-ubuntu-16-apache-2.4" do
     )
     @container.start
 
-    describe command("curl -sS http://localhost:#{LISTEN_PORT}") do
-      its(:stdout) { should eq "Apache2.4 Container\n\n" }
-      its(:stderr) { should eq "" }
+    cwd=Pathname.new(File.join(File.dirname(__FILE__)))
+    files = Dir["#{cwd}/files/*.html"]
+    short_files = files.map { |f| File.basename(f) }
+    Specinfra::Runner.send_file( files, "/var/www/html/")
+    short_files.each do |f|
+      describe command("curl -sS http://localhost:#{LISTEN_PORT}/#{f}") do
+        its(:stdout) { should contain "Success" }
+        its(:stderr) { should eq "" }
+      end
     end
 
     @container.kill
