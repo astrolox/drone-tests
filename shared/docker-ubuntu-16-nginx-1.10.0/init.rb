@@ -51,6 +51,7 @@ RSpec.shared_examples "docker-ubuntu-16-nginx-1.10.0" do
   cwd=Pathname.new(File.join(File.dirname(__FILE__)))
   testfile = Dir["#{cwd}/files/test.html"]
   short_files = testfile.map { |f| File.basename(f) }
+  puts "Transferring files to container: #{short_files}"
   Specinfra::Runner.send_file( testfile, "/var/www/html/")
   short_files.each do |f|
     describe command("curl -sS http://localhost:#{LISTEN_PORT}/#{f}") do
