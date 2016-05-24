@@ -43,28 +43,15 @@ RSpec.shared_examples "docker-ubuntu-16-apache-2.4" do
     it { should contain('AllowOverride All') }
   end
 
-  describe "Container tests" do
-    @container = Docker::Container.create(
-      'Image'       => Docker::Image.get(ENV['IMAGE']).id,
-      'HostConfig'  => {
-      'PortBindings' => { "#{LISTEN_PORT}/tcp" => [{ 'HostPort' => "#{LISTEN_PORT}" }]}
-      }
-    )
-    @container.start
-
-    cwd=Pathname.new(File.join(File.dirname(__FILE__)))
-    files = Dir["#{cwd}/files/*.html"]
-    short_files = files.map { |f| File.basename(f) }
-    Specinfra::Runner.send_file( files, "/var/www/html/")
-    short_files.each do |f|
-      describe command("curl -sS http://localhost:#{LISTEN_PORT}/#{f}") do
-        its(:stdout) { should contain "Success" }
-        its(:stderr) { should eq "" }
-      end
+  cwd=Pathname.new(File.join(File.dirname(__FILE__)))
+  files = Dir["#{cwd}/files/*.html"]
+  short_files = files.map { |f| File.basename(f) }
+  Specinfra::Runner.send_file( files, "/var/www/html/")
+  short_files.each do |f|
+    describe command("curl -sS http://localhost:#{LISTEN_PORT}/#{f}") do
+      its(:stdout) { should contain "Success" }
+      its(:stderr) { should eq "" }
     end
-
-    @container.kill
-    @container.delete(:force => true)
   end
 
 end
