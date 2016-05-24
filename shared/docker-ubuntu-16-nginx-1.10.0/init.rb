@@ -48,23 +48,15 @@ RSpec.shared_examples "docker-ubuntu-16-nginx-1.10.0" do
     it { should be_file }
   end
 
-    describe "Container" do
-        cwd=Pathname.new(File.join(File.dirname(__FILE__)))
-        testfile = Dir["#{cwd}/files/test.html"]
-        short_files = testfile.map { |f| File.basename(f) }
-        Specinfra::Runner.send_file( testfile, "/var/www/html/")
-        short_files.each do |f|
-
-        describe command("curl -sS http://localhost:#{LISTEN_PORT}/#{f}") do
-            its(:stdout) { should eq "Nginx\n" }
-            its(:stderr) { should eq "" }
-        end
-
-        describe port(8080) do
-            it { should be_listening }
-        end
+  cwd=Pathname.new(File.join(File.dirname(__FILE__)))
+  testfile = Dir["#{cwd}/files/test.html"]
+  short_files = testfile.map { |f| File.basename(f) }
+  Specinfra::Runner.send_file( testfile, "/var/www/html/")
+  short_files.each do |f|
+    describe command("curl -sS http://localhost:#{LISTEN_PORT}/#{f}") do
+      its(:stdout) { should eq "Nginx\n" }
+      its(:stderr) { should eq "" }
     end
-
-end
+  end
 
 end
