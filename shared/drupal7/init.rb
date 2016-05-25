@@ -1,7 +1,7 @@
 require 'rspec'
 require 'serverspec'
 
-RSpec.shared_examples "drupal" do
+RSpec.shared_examples "drupal7" do
 
   describe "Container" do
 
