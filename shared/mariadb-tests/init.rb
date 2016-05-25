@@ -3,7 +3,7 @@ require 'serverspec'
 
 RSpec.shared_examples "mariadb-tests" do
 
-    describe package('mariadb-server') do
+    describe package(PACKAGE_NAME) do
         it { should be_installed }
     end
 
