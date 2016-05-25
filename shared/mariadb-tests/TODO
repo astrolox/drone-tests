@@ -1,0 +1,1 @@
+Try to merge the tests for mysql and mariadb into one set of tests under the mysql-compatible-test folder
