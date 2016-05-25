@@ -36,4 +36,11 @@ RSpec.shared_examples "mysql-tests" do
             its(:stdout) { should match /testuser\tlocalhost/ }
         end
     end
+
+    describe "check pma user exists" do
+        describe command("echo \"SELECT user FROM mysql.user WHERE user='pma'\" | mysql --user=root --password=$MYSQL_ROOT_PASSWORD") do
+            its(:stdout) { should match /pma/ }
+            its(:stderr) { should eq "" }
+        end
+    end
 end
