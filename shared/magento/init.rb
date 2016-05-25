@@ -11,8 +11,8 @@ RSpec.shared_examples "magento" do
     
     describe command("curl -sS http://localhost:#{LISTEN_PORT}/install.php") do
       its(:stdout) { should contain "magentoSetup" }
-      its(:sterr)  { should eq "0"}
-
+      its(:stderr)  { should eq "0"}
+    end
 #    cwd=Pathname.new(File.join(File.dirname(__FILE__)))
 #    files = Dir["#{cwd}/files/*.php"]
 #    short_files = files.map { |f| File.basename(f) }
