@@ -14,6 +14,10 @@ RSpec.shared_examples "wordpress" do
       its(:stderr) { should eq "" }
     end
 
+#    describe command("curl -d weblog_title='testing.com' -d user_name='bob' -d admin_password='IAmAPassword1' -d admin_password2='IAmAPassword1' -d pw_weak='on' -d admin_email='123@123.com' -d blog_public='1' -d Submit='Install WordPress' -L http://localhost:#{LISTEN_PORT}/wp-admin/install.php?step=2") 
+#      its(:stdout) { should contain "Success" }
+#      its(:stderr) { should eq "" }
+#    end
 #    cwd=Pathname.new(File.join(File.dirname(__FILE__)))
 #    files = Dir["#{cwd}/files/*.php"]
 #    short_files = files.map { |f| File.basename(f) }
