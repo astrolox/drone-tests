@@ -28,7 +28,4 @@ RSpec.shared_examples "phpmyadmin-4.6-tests" do
         it { should be_file }
     end
 
-    describe port(8080) do
-      it { should be_listening }
-    end
 end
