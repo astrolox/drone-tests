@@ -9,9 +9,9 @@ RSpec.shared_examples "magento" do
       its(:stdout) { should match /^100000$/ }
     end
     
-    describe command("curl -sS http://localhost:#{LISTEN_PORT}/install.php") do
+    describe command("curl -sS http://localhost:#{LISTEN_PORT}/setup/#/landing-install") do
       its(:stdout) { should contain "magentoSetup" }
-      its(:stderr)  { should eq "0"}
+      its(:stderr) { should eq ""}
     end
 #    cwd=Pathname.new(File.join(File.dirname(__FILE__)))
 #    files = Dir["#{cwd}/files/*.php"]
@@ -27,5 +27,3 @@ RSpec.shared_examples "magento" do
   end
 
 end
-
-
