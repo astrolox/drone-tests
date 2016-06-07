@@ -1,12 +1,17 @@
 require 'rspec'
 require 'serverspec'
 
-RSpec.shared_examples "drupal" do
+RSpec.shared_examples "drupal7" do
 
   describe "Container" do
 
     describe command('id -u') do
       its(:stdout) { should match /^100000$/ }
+    end
+    
+    describe command("curl -sS http://localhost:#{LISTEN_PORT}/install.php") do
+      its(:stdout) { contain "installation" }
+      its(:stderr) { eq "0"}
     end
 
 #    cwd=Pathname.new(File.join(File.dirname(__FILE__)))

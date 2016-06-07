@@ -1,7 +1,7 @@
 require 'rspec'
 require 'serverspec'
 
-RSpec.shared_examples "magento" do
+RSpec.shared_examples "drupal8" do
 
   describe "Container" do
 
@@ -9,10 +9,11 @@ RSpec.shared_examples "magento" do
       its(:stdout) { should match /^100000$/ }
     end
     
-    describe command("curl -sS http://localhost:#{LISTEN_PORT}/setup/#/landing-install") do
-      its(:stdout) { should contain "magentoSetup" }
-      its(:stderr) { should eq ""}
+    describe command("curl -sS http://localhost:#{LISTEN_PORT}/core/install.php") do
+      its(:stdout) { contain "Choose language" }
+      its(:stderr) { eq "0"}
     end
+
 #    cwd=Pathname.new(File.join(File.dirname(__FILE__)))
 #    files = Dir["#{cwd}/files/*.php"]
 #    short_files = files.map { |f| File.basename(f) }
@@ -27,3 +28,5 @@ RSpec.shared_examples "magento" do
   end
 
 end
+
+
