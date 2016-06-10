@@ -7,19 +7,18 @@ RSpec.shared_examples "mysql-tests" do
         it { should be_installed }
     end
 
-    describe service('mysql') do
-      it { should be_enabled }
+    describe process('mysqld') do
       it { should be_running }
     end
 
-    describe group('mysql') do
-        it { should exist }
-    end
+#    describe group('mysql') do
+#        it { should exist }
+#    end
 
-    describe user('mysql') do
-        it { should exist }
-        it { should belong_to_group 'mysql' }
-    end
+#    describe user('mysql') do
+#        it { should exist }
+#        it { should belong_to_group 'mysql' }
+#    end
 
     describe "create database" do
         describe command("echo \"DROP DATABASE IF EXISTS dbtest; CREATE DATABASE dbtest; SHOW DATABASES LIKE 'dbtest'\" | mysql --user=root --password=$MYSQL_ROOT_PASSWORD") do
