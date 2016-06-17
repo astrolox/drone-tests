@@ -9,6 +9,12 @@ RSpec.shared_examples "magento" do
       its(:stdout) { should match /^100000$/ }
     end
     
+    describe file('/var/www/html/composer.json') do
+    it { should exist }
+    it { should be_file }
+    it { should contain('"version": "2.0.7"') }
+  end
+
     describe command("curl -sS http://localhost:#{LISTEN_PORT}/setup/#/landing-install") do
       its(:stdout) { should contain "magentoSetup" }
       its(:stderr) { should eq ""}
