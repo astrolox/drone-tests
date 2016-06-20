@@ -25,10 +25,10 @@ RSpec.shared_examples "docker-ubuntu-16-nginx-1.10.0" do
       it { should be_mode 777 }
   end
 
-  describe file('/var/www') do
-    it { should be_directory }
-    it { should be_mode 755 }
-  end
+#  describe file('/var/www') do
+#    it { should be_directory }
+#    it { should be_mode 755 }
+#  end
 
   describe file('/var/www/html') do
     it { should be_directory }
