@@ -7,7 +7,7 @@ RSpec.shared_examples "docker-ubuntu-16-apache-2.4" do
     it { should be_installed }
   end
 
-    describe process('apache2') do
+    describe process('/usr/sbin/apache2 -DFOREGROUND') do
     it { should be_running }
   end
 
