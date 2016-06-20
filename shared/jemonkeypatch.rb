@@ -57,9 +57,9 @@ module Specinfra
             counter += 5
           end
           if counter >= timeout then
-            fail "Container #{@container} did not start in time."
             @container.kill unless get_config(:docker_debug)
             @container.delete(:force => true) unless get_config(:docker_debug)
+            fail "Container #{@container} did not start in time."
           end
         end
       end
