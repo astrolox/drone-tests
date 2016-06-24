@@ -1,7 +1,7 @@
 require 'rspec'
 require 'serverspec'
 
-RSpec.shared_examples "magento" do
+RSpec.shared_examples "magento-mhtest" do
 
   describe "Container" do
 
