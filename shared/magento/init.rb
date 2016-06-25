@@ -12,7 +12,7 @@ RSpec.shared_examples "magento" do
     describe file('/var/www/html/composer.json') do
     it { should exist }
     it { should be_file }
-    it { should contain('"version": "2.0.7"') }
+    it { should contain('"version": "2.1.0"') }
   end
 
     describe command("curl -sS http://localhost:#{LISTEN_PORT}/setup/#/landing-install") do
