@@ -32,11 +32,6 @@ RSpec.shared_examples "docker-ubuntu-16-apache-2.4-alt" do
     it { should be_file }
   end
 
-  describe file('/etc/apache2/mods-available/dir.conf') do
-    it { should exist }
-    it { should contain('DirectoryIndex index.php index.html index.cgi index.pl index.xhtml index.htm') }
-  end
-
   describe file('/etc/apache2/sites-available/000-default.conf') do
     it { should exist }
     it { should contain('VirtualHost *:8080') }
