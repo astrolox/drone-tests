@@ -8,7 +8,8 @@ RSpec.shared_examples "python-2-tests" do
   end
 
   describe command("python --version") do
-    its(:stdout) { should contain  "Python 2" }
+    its(:stdout) { should contain  "" }
+    its(:stderr) { should contain  "Python 2" }
   end
 
   describe command("which python") do
