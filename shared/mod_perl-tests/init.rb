@@ -9,11 +9,15 @@ RSpec.shared_examples "mod_perl-tests" do
       its(:stdout) { should match /^100000$/ }
     end
 
-    puts "Getting CWD" 
+  describe file('/var/www/perl') do
+    it { should be_directory }
+  end
+
+    puts "Getting CWD"
     cwd=Pathname.new(File.join(File.dirname(__FILE__)))
 
-    puts "CWD is #{cwd}" 
-    
+    puts "CWD is #{cwd}"
+
     ['perl','cgi-bin','html'].each do |dir|
       files = Dir["#{cwd}/files/#{dir}/*"]
       short_files = files.map { |f| File.basename(f) }
