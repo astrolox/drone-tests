@@ -3,13 +3,17 @@ require 'serverspec'
 
 RSpec.shared_examples "mod_perl-tests" do
   describe "Container" do
-
+    puts "Entered container" 
+    puts "Checking UID" 
     describe command('id -u') do
       its(:stdout) { should match /^100000$/ }
     end
 
+    puts "Getting CWD" 
     cwd=Pathname.new(File.join(File.dirname(__FILE__)))
 
+    puts "CWD is #{cwd}" 
+    
     ['perl','cgi-bin','html'].each do |dir|
       files = Dir["#{cwd}/files/#{dir}/*"]
       short_files = files.map { |f| File.basename(f) }
