@@ -14,13 +14,14 @@ RSpec.shared_examples "mod_perl-tests" do
     short_files = files.map { |f| File.basename(f) }
     puts "Transferring #{dir} files to container: #{short_files}"
     Specinfra::Runner.send_file( files, "/var/www/#{dir}/")
+    puts "  Running #{dir} tests"
     short_files.each do |f|
       if dir == 'html'
         test = f
       else
         test = "#{dir}/#{f}"
       end
-      puts "Testing #{test}"
+      puts "    Testing #{test}"
       describe command("curl -sS http://localhost:#{LISTEN_PORT}/#{test}") do
         its(:stdout) { should eq "Success" }
         its(:stderr) { should eq "" }
