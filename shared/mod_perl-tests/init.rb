@@ -26,6 +26,7 @@ RSpec.shared_examples "mod_perl-tests" do
           test = f
         else
          test = "#{dir}/#{f}"
+	 `chmod 755 /var/www/#{dir}/#{f}`
        end
        puts "    Testing #{test}"
       describe command("curl -sS http://localhost:#{LISTEN_PORT}/#{test}") do
