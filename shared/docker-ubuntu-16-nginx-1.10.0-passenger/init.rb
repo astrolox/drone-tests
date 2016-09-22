@@ -24,7 +24,8 @@ RSpec.shared_examples "docker-ubuntu-16-nginx-1.10.0-passenger" do
       it { should be_directory }
       it { should be_mode 777 }
   end
-  describe package('nginx') do
+  
+  describe package('nginx-common') do
     it { should be_installed }
   end
 
