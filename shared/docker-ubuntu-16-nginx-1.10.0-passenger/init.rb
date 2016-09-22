@@ -3,7 +3,7 @@ require 'serverspec'
 
 RSpec.shared_examples "docker-ubuntu-16-nginx-1.10.0-passenger" do
 
-  describe file('/etc/nginx/sites-enabled/site.conf') do
+  describe file('/etc/nginx/sites-enabled/default') do
     it { should contain('listen 8080') }
     it { should contain('listen [::]:8080') }
   end
