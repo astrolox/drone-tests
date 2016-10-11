@@ -1,5 +1,5 @@
 <?php
-if(function_exists('soap')) {
+if(extension_loaded('soap')) {
     echo "Success";
 } else {
     echo "Failed";
