@@ -44,7 +44,7 @@ RSpec.shared_examples "docker-ubuntu-16-nginx-1.10.0-passenger" do
   puts "Transferring files to container: #{short_files}"
 #  set :backend, :docker
 #  set :docker_container, @container.id
-  Dir.mkdir("/var/www/public") unless File.exist?("/var/www/public")
+  Specinfra::Runner.run_command("mkdir -p /var/www/public")
   Specinfra::Runner.send_file( testfile, "/var/www/public")
   short_files.each do |f|
     describe command("curl -sS http://localhost:#{LISTEN_PORT}/#{f}") do
