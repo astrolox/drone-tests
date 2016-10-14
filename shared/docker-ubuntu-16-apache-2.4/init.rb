@@ -49,4 +49,12 @@ RSpec.shared_examples "docker-ubuntu-16-apache-2.4" do
     end
   end
 
+  cwd=Pathname.new(File.join(File.dirname(__FILE__)))
+  files = Dir["#{cwd}/files/test"]
+  Specinfra::Runner.send_file( files, "/var/www/html/")
+  describe command("curl -sS -H \"X-Forwarded-For: 1.2.3.4\" -H \"X-Forwarded-Port: 99\"") do
+    its(:stdout) { should contain "1.2.3.4" and "99"}
+    its(:stderr) { should eq "" }
+  end
+
 end
