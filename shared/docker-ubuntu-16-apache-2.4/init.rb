@@ -53,12 +53,12 @@ RSpec.shared_examples "docker-ubuntu-16-apache-2.4" do
   files = Dir["#{cwd}/files/test"]
   Specinfra::Runner.send_file( files, "/var/www/html/")
 
-  describe file('/var/www/html/test/test') do
+  describe file('/var/www/html/test') do
     it { should exist }
     it { should be_directory }
   end
 
-  describe file('/var/www/html/test/test/rpaf.sh') do
+  describe file('/var/www/html/test/rpaf.sh') do
     it { should exist }
     it { should be_file }
     it { should be_executable.by('others') }
