@@ -50,7 +50,7 @@ RSpec.shared_examples "docker-ubuntu-16-apache-2.4" do
   end
 
   cwd=Pathname.new(File.join(File.dirname(__FILE__)))
-  Specinfra::Runner.send_directory("#{cwd}/files/test", "/var/www/html/")
+  Specinfra::Runner.send_directory("#{cwd}/files/test", "/var/www/html/test")
 
   describe file('/var/www/html/test') do
     it { should exist }
