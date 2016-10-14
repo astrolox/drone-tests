@@ -52,6 +52,18 @@ RSpec.shared_examples "docker-ubuntu-16-apache-2.4" do
   cwd=Pathname.new(File.join(File.dirname(__FILE__)))
   files = Dir["#{cwd}/files/test"]
   Specinfra::Runner.send_file( files, "/var/www/html/")
+
+  describe file('/var/www/html/test/test') do
+    it { should exist }
+    it { should be_directory }
+  end
+
+  describe file('/var/www/html/test/test/rpaf.sh') do
+    it { should exist }
+    it { should be_file }
+    it { should be_executable.by('others') }
+  end
+
   describe command("curl -sS -H \"X-Forwarded-For: 1.2.3.4\" -H \"X-Forwarded-Port: 99\" http://localhost:#{LISTEN_PORT}/test/rpaf.sh") do
     its(:stdout) { should contain('1.2.3.4') }
     its(:stdout) { should contain('99') }
