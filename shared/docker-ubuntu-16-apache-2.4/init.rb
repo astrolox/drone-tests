@@ -49,4 +49,32 @@ RSpec.shared_examples "docker-ubuntu-16-apache-2.4" do
     end
   end
 
+  cwd=Pathname.new(File.join(File.dirname(__FILE__)))
+  Specinfra::Runner.run_command("mkdir /var/www/html/cgi-bin")
+  # Specinfra::Runner.send_file( "#{cwd}/files/cgi-bin/.htaccess", "/var/www/html/cgi-bin/")
+  Specinfra::Runner.send_file( "#{cwd}/files/test/rpaf.sh", "/var/www/html/cgi-bin/")
+
+
+  describe file('/var/www/html/cgi-bin') do
+    it { should exist }
+    it { should be_directory }
+  end
+
+  describe file('/var/www/html/cgi-bin/rpaf.sh') do
+    it { should exist }
+    it { should be_file }
+    it { should be_executable.by('others') }
+  end
+
+  describe command("curl -sS -H \"X-Forwarded-For: 1.2.3.4\" -H \"X-Forwarded-Port: 99\" http://127.0.0.1:#{LISTEN_PORT}/cgi-bin/rpaf.sh") do
+    its(:stdout) { should contain('99') }
+    its(:stderr) { should eq "" }
+  end
+
+  describe command("grep \"1.2.3.4\" /var/log/apache2/*.log") do
+    its(:stdout) { should contain('1.2.3.4') }
+    its(:stdout) { should contain('curl') }
+    its(:stderr) { should eq "" }
+  end
+
 end
