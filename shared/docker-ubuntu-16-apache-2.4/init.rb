@@ -52,7 +52,7 @@ RSpec.shared_examples "docker-ubuntu-16-apache-2.4" do
   cwd=Pathname.new(File.join(File.dirname(__FILE__)))
   Specinfra::Runner.run_command("mkdir /var/www/html/cgi-bin")
   # Specinfra::Runner.send_file( "#{cwd}/files/cgi-bin/.htaccess", "/var/www/html/cgi-bin/")
-  Specinfra::Runner.send_file( "#{cwd}/files/cgi-bin/rpaf.sh", "/var/www/html/cgi-bin/")
+  Specinfra::Runner.send_file( "#{cwd}/files/test/rpaf.sh", "/var/www/html/cgi-bin/")
 
 
   describe file('/var/www/html/cgi-bin') do
