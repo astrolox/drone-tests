@@ -66,7 +66,7 @@ RSpec.shared_examples "docker-ubuntu-16-apache-2.4" do
     it { should be_executable.by('others') }
   end
 
-  describe command("curl -sS -H \"X-Forwarded-For: 1.2.3.4\" -H \"X-Forwarded-Port: 99\" http://localhost:#{LISTEN_PORT}/test/rpaf.sh") do
+  describe command("curl -sS -H \"X-Forwarded-For: 1.2.3.4\" -H \"X-Forwarded-Port: 99\" http://127.0.0.1:#{LISTEN_PORT}/test/rpaf.sh") do
     its(:stdout) { should contain('1.2.3.4') }
     its(:stdout) { should contain('99') }
     its(:stderr) { should eq "" }
