@@ -47,7 +47,7 @@ RSpec.shared_examples "docker-ubuntu-16-nginx-1.10.0" do
     it { should exist }
     it { should be_file }
   end
-  
+
   cwd=Pathname.new(File.join(File.dirname(__FILE__)))
   testfile = Dir["#{cwd}/files/test.html"]
   short_files = testfile.map { |f| File.basename(f) }
@@ -60,6 +60,18 @@ RSpec.shared_examples "docker-ubuntu-16-nginx-1.10.0" do
       its(:stdout) { should eq "Nginx\n" }
       its(:stderr) { should eq "" }
     end
+  end
+
+
+  describe command("curl -sS -H \"X-Forwarded-For: 1.2.3.4\" -H \"X-Forwarded-Port: 99\" http://localhost:#{LISTEN_PORT}") do
+    its(:stdout) { should eq "Nginx\n" }
+    its(:stderr) { should eq "" }
+  end
+
+  describe command("grep \"1.2.3.4\" /var/log/nginx/*.log") do
+    its(:stdout) { should contain('1.2.3.4') }
+    its(:stdout) { should contain('curl') }
+    its(:stderr) { should eq "" }
   end
 
 end
