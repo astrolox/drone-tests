@@ -19,12 +19,14 @@ RSpec.shared_examples "php-7.0-tests" do
     end
   end
 
-  describe command("curl -sS -H \"X-Forwarded-For: 99.99.99.99\" -H \"X-Forwarded-Port: 99\" http://localhost:#{LISTEN_PORT}/phpinfo.php | grep \"REMOTE_ADDR\"") do
-    its(:stdout) { should contain "99.99.99.99" }
+  Specinfra::Runner.send_file( phpinfo.php, "/var/www/html/")
+
+  describe command("curl -sS -H \"X-Forwarded-For: 1.2.3.4\" -H \"X-Forwarded-Port: 99\" http://localhost:#{LISTEN_PORT}/phpinfo.php | grep \"REMOTE_ADDR\"") do
+    its(:stdout) { should contain "1.2.3.4" }
     its(:stderr) { shold eq "" }
   end
 
-  describe command("curl -sS -H \"X-Forwarded-For: 99.99.99.99\" -H \"X-Forwarded-Port: 99\" http://localhost:#{LISTEN_PORT}/phpinfo.php | grep \"SERVER_PORT\"") do
+  describe command("curl -sS -H \"X-Forwarded-For: 1.2.3.4\" -H \"X-Forwarded-Port: 99\" http://localhost:#{LISTEN_PORT}/phpinfo.php | grep \"SERVER_PORT\"") do
     its(:stdout) { should contain "99" }
     its(:stderr) { should eq "" }
   end
