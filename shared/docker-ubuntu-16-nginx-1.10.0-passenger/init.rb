@@ -1,9 +1,9 @@
 require 'rspec'
 require 'serverspec'
 
-RSpec.shared_examples "docker-ubuntu-16-nginx-1.10.0" do
+RSpec.shared_examples "docker-ubuntu-16-nginx-1.10.0-passenger" do
 
-  describe file('/etc/nginx/sites-enabled/site.conf') do
+  describe file('/etc/nginx/sites-enabled/default') do
     it { should contain('listen 8080') }
     it { should contain('listen [::]:8080') }
   end
@@ -24,18 +24,8 @@ RSpec.shared_examples "docker-ubuntu-16-nginx-1.10.0" do
       it { should be_directory }
       it { should be_mode 777 }
   end
-
-#  describe file('/var/www') do
-#    it { should be_directory }
-#    it { should be_mode 755 }
-#  end
-
-  describe file('/var/www/html') do
-    it { should be_directory }
-    it { should be_mode 777 }
-  end
-
-  describe package('nginx') do
+  
+  describe package('nginx-common') do
     it { should be_installed }
   end
 
@@ -47,31 +37,20 @@ RSpec.shared_examples "docker-ubuntu-16-nginx-1.10.0" do
     it { should exist }
     it { should be_file }
   end
-
+  
   cwd=Pathname.new(File.join(File.dirname(__FILE__)))
   testfile = Dir["#{cwd}/files/test.html"]
   short_files = testfile.map { |f| File.basename(f) }
   puts "Transferring files to container: #{short_files}"
 #  set :backend, :docker
 #  set :docker_container, @container.id
-  Specinfra::Runner.send_file( testfile, "/var/www/html/")
+  Specinfra::Runner.run_command("mkdir -p /var/www/public")
+  Specinfra::Runner.send_file( testfile, "/var/www/public")
   short_files.each do |f|
     describe command("curl -sS http://localhost:#{LISTEN_PORT}/#{f}") do
       its(:stdout) { should eq "Nginx\n" }
       its(:stderr) { should eq "" }
     end
-  end
-
-
-  describe command("curl -sS -H \"X-Forwarded-For: 1.2.3.4\" -H \"X-Forwarded-Port: 99\" http://localhost:#{LISTEN_PORT}/test.html") do
-    its(:stdout) { should eq "Nginx\n" }
-    its(:stderr) { should eq "" }
-  end
-
-  describe command("grep \"1.2.3.4\" /var/log/nginx/*.log") do
-    its(:stdout) { should contain('1.2.3.4') }
-    its(:stdout) { should contain('curl') }
-    its(:stderr) { should eq "" }
   end
 
 end
