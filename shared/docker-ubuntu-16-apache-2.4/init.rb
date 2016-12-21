@@ -61,7 +61,9 @@ RSpec.shared_examples "docker-ubuntu-16-apache-2.4" do
   end
 
   # New drupal htaccess file breaks CGI bin. Adding removal of file.
-  Specinfra::Runner.run_command("if [ -e '/var/www/html/.htaccess' ]; then echo 'Moving .htaccess file'; mv /var/www/html/.htaccess /var/www/html/disabled_htaccess; else echo 'No htaccess exists'; fi")
+  describe command("if [ -e '/var/www/html/.htaccess' ]; then echo 'Moving .htaccess file'; mv /var/www/html/.htaccess /var/www/html/disabled_htaccess; else echo 'No htaccess exists'; fi") do
+    it { should return_exit_status 0 }
+  end
 
   describe file('/var/www/html/cgi-bin/rpaf.sh') do
     it { should exist }
@@ -81,6 +83,8 @@ RSpec.shared_examples "docker-ubuntu-16-apache-2.4" do
   end
 
   # Now add htaccess back for any CMS work required
-  Specinfra::Runner.run_command("if [ -e '/var/www/html/disabled_htaccess' ]; then echo 'Moving disabled .htaccess file back'; mv /var/www/html/disabled_htaccess /var/www/html/.htaccess; else echo 'No disabled htaccess exists'; fi")
+  describe command("if [ -e '/var/www/html/disabled_htaccess' ]; then echo 'Moving disabled .htaccess file back'; mv /var/www/html/disabled_htaccess /var/www/html/.htaccess; else echo 'No disabled htaccess exists'; fi") do
+    it { should return_exit_status 0 }
+  end
 
 end
