@@ -41,4 +41,17 @@ RSpec.shared_examples "mariadb-tests" do
             its(:stderr) { should eq "" }
         end
     end
+
+    describe "check cgroup limit is set" do
+        describe file('/sys/fs/cgroup/memory/memory.limit_in_bytes') do
+            it { should exist }
+            its(:content) { should match /999997440/ }
+        end
+    end
+
+    describe "check limits set in sql" do
+        describe command ("echo \"SELECT @@innodb_buffer_pool_size\" | mysql --user=root --password=$MYSQL_ROOT_PASSWORD") do
+           its(:stdout) {should match /536870912/ }
+        end
+    end
 end
