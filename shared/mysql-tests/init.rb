@@ -40,17 +40,4 @@ RSpec.shared_examples "mysql-tests" do
             its(:stderr) { should eq "mysql: [Warning] Using a password on the command line interface can be insecure.\n" }
         end
     end
-
-    describe "check cgroup limit is set" do
-        describe file('/sys/fs/cgroup/memory/memory.limit_in_bytes') do
-            it { should exist }
-            its(:content) { should match /999997440/ }
-        end
-    end
-
-    describe "check limits set in sql" do
-        describe command ("echo \"SELECT @@innodb_buffer_pool_size\" | mysql --user=root --password=$MYSQL_ROOT_PASSWORD") do
-           its(:stdout) {should match /536870912/ }
-        end
-    end
 end
