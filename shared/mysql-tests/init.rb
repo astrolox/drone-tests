@@ -60,7 +60,7 @@ RSpec.shared_examples "mysql-tests" do
     describe "check limits set in sql" do
       describe file('/etc/mysql/my.cnf') do
         it { should exist }
-        it { should contain /#{logsize}/}
+        it { should contain /innodb_log_file_size    = #{logsize}M/}
       end
     end
 end
