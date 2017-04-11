@@ -1,6 +1,8 @@
 require 'rspec'
 require 'serverspec'
 
+logsize = 0
+
 RSpec.shared_examples "mysql-tests" do
 
     describe package('mysql-server') do
@@ -47,19 +49,18 @@ RSpec.shared_examples "mysql-tests" do
         end
     end
 
+    describe command('cat /sys/fs/cgroup/memory/memory.limit_in_bytes') do
+      it "should contain a value" do
+        expect(subject.stdout).to match(/[0-9]{1,9}/)
+        memory = subject.stdout.to_i
+        logsize = (memory*15 / 1024 / 1024 / 100).to_i
+      end
+    end
+
     describe "check limits set in sql" do
-    #export MYSQL_INNODB_LOG_FILE_SIZE=${MYSQL_INNODB_LOG_FILE_SIZE:-$((MEMORY_LIMIT_IN_BYTES*15/1024/1024/100))M}
-#    MEMORY_LIMIT_IN_BYTES = File.read("/sys/fs/cgroup/memory/memory.limit_in_bytes").to_i
-#    puts MEMORY_LIMIT_IN_BYTES
-#    LOGSIZE = (MEMORY_LIMIT_IN_BYTES*15 / 1024 / 1024 / 100)
-#    puts LOGSIZE
-        describe file('/etc/mysql/my.cnf') do
-            it { should exist }
-            let(:MEMORY_LIMIT) { File.read("/sys/fs/cgroup/memory/memory.limit_in_bytes")}
-            puts MEMORY_LIMIT
-            LOGSIZE = MEMORY_LIMIT*15 / 1024 / 1024 / 100
-            puts LOGSIZE
-            it { should contain /#{LOGSIZE}/}
-        end
+      describe file('/etc/mysql/my.cnf') do
+        it { should exist }
+        it { should contain /#{logsize}/}
+      end
     end
 end
