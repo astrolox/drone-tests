@@ -44,13 +44,22 @@ RSpec.shared_examples "mysql-tests" do
     describe "check cgroup limit is set" do
         describe file('/sys/fs/cgroup/memory/memory.limit_in_bytes') do
             it { should exist }
-            its(:content) { should match /999997440/ }
         end
     end
 
     describe "check limits set in sql" do
-        describe command ("echo \"SELECT @@innodb_buffer_pool_size\" | mysql --user=root --password=$MYSQL_ROOT_PASSWORD") do
-           its(:stdout) {should match /536870912/ }
+    #export MYSQL_INNODB_LOG_FILE_SIZE=${MYSQL_INNODB_LOG_FILE_SIZE:-$((MEMORY_LIMIT_IN_BYTES*15/1024/1024/100))M}
+#    MEMORY_LIMIT_IN_BYTES = File.read("/sys/fs/cgroup/memory/memory.limit_in_bytes").to_i
+#    puts MEMORY_LIMIT_IN_BYTES
+#    LOGSIZE = (MEMORY_LIMIT_IN_BYTES*15 / 1024 / 1024 / 100)
+#    puts LOGSIZE
+        describe file('/etc/mysql/my.cnf') do
+            it { should exist }
+            let(:MEMORY_LIMIT) { File.read("/sys/fs/cgroup/memory/memory.limit_in_bytes")}
+            puts MEMORY_LIMIT
+            LOGSIZE = MEMORY_LIMIT*15 / 1024 / 1024 / 100
+            puts LOGSIZE
+            it { should contain /#{LOGSIZE}/}
         end
     end
 end
