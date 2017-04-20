@@ -1,6 +1,8 @@
 require 'rspec'
 require 'serverspec'
 
+logsize = 0
+
 RSpec.shared_examples "mariadb-tests" do
 
     describe package(PACKAGE_NAME) do
@@ -45,13 +47,21 @@ RSpec.shared_examples "mariadb-tests" do
     describe "check cgroup limit is set" do
         describe file('/sys/fs/cgroup/memory/memory.limit_in_bytes') do
             it { should exist }
-            its(:content) { should match /999997440/ }
         end
     end
 
+    describe command('cat /sys/fs/cgroup/memory/memory.limit_in_bytes') do
+      it "should contain a value" do
+        expect(subject.stdout).to match(/[0-9]{1,9}/)
+        memory = subject.stdout.to_i
+        logsize = (memory*15 / 1024 / 1024 / 100).to_i
+      end
+    end
+
     describe "check limits set in sql" do
-        describe command ("echo \"SELECT @@innodb_buffer_pool_size\" | mysql --user=root --password=$MYSQL_ROOT_PASSWORD") do
-           its(:stdout) {should match /536870912/ }
-        end
+      describe file('/etc/mysql/mariadb.conf.d/50-server.cnf') do
+        it { should exist }
+        it { should contain /innodb_log_file_size    = #{logsize}M/}
+      end
     end
 end
